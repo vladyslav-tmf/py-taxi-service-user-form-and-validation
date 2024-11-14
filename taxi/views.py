@@ -106,15 +106,17 @@ class DriverUpdateView(LoginRequiredMixin, generic.UpdateView):
     form_class = DriverLicenseUpdateForm
 
 
-@login_required
-def assign_driver(request: HttpRequest, pk: int) -> HttpResponseRedirect:
-    car = get_object_or_404(Car, id=pk)
-    car.drivers.add(request.user)
-    return redirect("taxi:car-detail", pk=pk)
+class CarAssignDriverView(LoginRequiredMixin, generic.View):
+    @staticmethod
+    def post(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+        car = get_object_or_404(Car, id=pk)
+        car.drivers.add(request.user)
+        return redirect("taxi:car-detail", pk=pk)
 
 
-@login_required
-def remove_driver(request: HttpRequest, pk: int) -> HttpResponseRedirect:
-    car = get_object_or_404(Car, id=pk)
-    car.drivers.remove(request.user)
-    return redirect("taxi:car-detail", pk=pk)
+class CarRemoveDriverView(LoginRequiredMixin, generic.View):
+    @staticmethod
+    def post(request: HttpRequest, pk: int) -> HttpResponseRedirect:
+        car = get_object_or_404(Car, id=pk)
+        car.drivers.remove(request.user)
+        return redirect("taxi:car-detail", pk=pk)

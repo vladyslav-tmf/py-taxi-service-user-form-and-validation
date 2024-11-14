@@ -1,22 +1,12 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.core.validators import RegexValidator
 
 from taxi.models import Car, Driver
 
 
 class LicenseNumberFormMixin(forms.Form):
-    license_number = forms.CharField(
-        max_length=8,
-        validators=[
-            RegexValidator(
-                regex=r"^[A-Z]{3}[0-9]{5}$",
-                message="The license number must contain 3 capital letters "
-                        "and 5 digits (for example, ABC12345)."
-            )
-        ]
-    )
+    license_number = forms.CharField()
 
 
 class DriverCreationForm(UserCreationForm, LicenseNumberFormMixin):
